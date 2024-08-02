@@ -5,6 +5,7 @@ import com.mycompany.inventory.royalmabati.model.ManufacturingOrder;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ManufacturingService {
     private final ManufacturingDAO manufacturingDAO;
@@ -49,6 +50,15 @@ public class ManufacturingService {
     public List<ManufacturingOrder> getActiveManufacturingOrders() {
         return getAllManufacturingOrders().stream()
                 .filter(order -> !"Completed".equals(order.getStatus()))
-                .toList();
+                .collect(Collectors.toList());
+    }
+
+    public List<ManufacturingOrder> searchOrders(String searchTerm) {
+        return getAllManufacturingOrders().stream()
+                .filter(order -> order.getId().toLowerCase().contains(searchTerm.toLowerCase()) ||
+                        order.getProductId().toLowerCase().contains(searchTerm.toLowerCase()) ||
+                        order.getStatus().toLowerCase().contains(searchTerm.toLowerCase()) ||
+                        String.valueOf(order.getQuantity()).contains(searchTerm))
+                .collect(Collectors.toList());
     }
 }
