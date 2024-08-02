@@ -3,6 +3,8 @@
 ## Overview
 
 The **Royal Mabati Retail Inventory System** is a Java-based application designed to manage retail inventory for Royal Mabati Mills. This system provides functionalities for managing client information, stock tracking, supplier management, sales processing, manufacturing details, and reporting. The application is built using Java Swing for the user interface and MongoDB for data storage.
+<img width="1280" alt="Inventory system" src="https://github.com/user-attachments/assets/3f00daf3-9768-48fe-9a24-3c4681f09a72">
+
 
 ## Features
 
