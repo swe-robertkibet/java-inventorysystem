@@ -78,5 +78,5 @@ Contributions are welcome! Please fork the repository, make your changes, and su
 
 For any inquiries or issues, please contact:
 
-- **Robert Kibet:** kurgatroba@gmail.com
+- **Robert Kibet:** swe.robertkibet@gmail.com
 
