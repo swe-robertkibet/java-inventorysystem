@@ -34,10 +34,10 @@ public class ClientService {
 
     public List<Client> searchClients(String searchTerm) {
         // Implement search logic here
-        // This is a placeholder implementation
         List<Client> allClients = getAllClients();
         return allClients.stream()
-                .filter(client -> client.getName().toLowerCase().contains(searchTerm.toLowerCase()) ||
+                .filter(client -> client.getId().contains(searchTerm) ||
+                        client.getName().toLowerCase().contains(searchTerm.toLowerCase()) ||
                         client.getContact().contains(searchTerm) ||
                         client.getAddress().toLowerCase().contains(searchTerm.toLowerCase()))
                 .toList();

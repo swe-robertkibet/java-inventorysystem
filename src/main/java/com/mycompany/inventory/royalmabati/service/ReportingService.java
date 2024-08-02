@@ -2,7 +2,6 @@ package com.mycompany.inventory.royalmabati.service;
 
 import com.mycompany.inventory.royalmabati.model.Sale;
 import com.mycompany.inventory.royalmabati.model.Stock;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,5 +41,18 @@ public class ReportingService {
                 .collect(Collectors.groupingBy(Sale::getClientId, Collectors.summingDouble(Sale::getTotalPrice)));
     }
 
-    // Add more reporting methods as needed
+    public List<Sale> searchSales(String searchTerm) {
+        List<Sale> allSales = salesService.getAllSales();
+        return allSales.stream()
+                .filter(sale -> sale.getProductId().toLowerCase().contains(searchTerm.toLowerCase()) ||
+                        sale.getClientId().toLowerCase().contains(searchTerm.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Stock> searchStock(String searchTerm) {
+        List<Stock> allStock = stockService.getAllStock();
+        return allStock.stream()
+                .filter(stock -> stock.getProductName().toLowerCase().contains(searchTerm.toLowerCase()))
+                .collect(Collectors.toList());
+    }
 }

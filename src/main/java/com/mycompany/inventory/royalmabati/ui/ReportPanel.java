@@ -1,17 +1,20 @@
 package com.mycompany.inventory.royalmabati.ui;
 
+import com.mycompany.inventory.royalmabati.model.Sale;
+import com.mycompany.inventory.royalmabati.model.Stock;
 import com.mycompany.inventory.royalmabati.service.ReportingService;
 import com.mycompany.inventory.royalmabati.util.ReportGenerator;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class ReportPanel extends JPanel {
     private JComboBox<String> reportTypeComboBox;
-    private JTextField startDateField, endDateField, outputPathField;
-    private JButton generateButton;
+    private JTextField startDateField, endDateField, outputPathField, searchField;
+    private JButton generateButton, searchButton;
     private ReportingService reportingService;
 
     public ReportPanel() {
@@ -19,7 +22,7 @@ public class ReportPanel extends JPanel {
         setLayout(new BorderLayout());
 
         // Form Panel
-        JPanel formPanel = new JPanel(new GridLayout(5, 2));
+        JPanel formPanel = new JPanel(new GridLayout(6, 2));
         formPanel.add(new JLabel("Report Type:"));
         String[] reportTypes = { "Sales Revenue", "Top Selling Products", "Low Stock", "Sales by Client" };
         reportTypeComboBox = new JComboBox<>(reportTypes);
@@ -37,13 +40,20 @@ public class ReportPanel extends JPanel {
         outputPathField = new JTextField();
         formPanel.add(outputPathField);
 
+        formPanel.add(new JLabel("Search:"));
+        searchField = new JTextField();
+        formPanel.add(searchField);
+
         generateButton = new JButton("Generate Report");
+        searchButton = new JButton("Search");
         formPanel.add(generateButton);
+        formPanel.add(searchButton);
 
         add(formPanel, BorderLayout.NORTH);
 
-        // Add action listener
+        // Add action listeners
         generateButton.addActionListener(e -> generateReport());
+        searchButton.addActionListener(e -> searchReportData());
     }
 
     private void generateReport() {
@@ -112,6 +122,33 @@ public class ReportPanel extends JPanel {
     private void generateSalesByClientReport(Date startDate, Date endDate, String outputPath) {
         Map<String, Double> salesByClient = reportingService.getSalesByClient(startDate, endDate);
         ReportGenerator.generateSalesReport(salesByClient, outputPath);
+    }
+
+    private void searchReportData() {
+        String searchTerm = searchField.getText().trim();
+        if (!searchTerm.isEmpty()) {
+            List<Sale> salesResults = reportingService.searchSales(searchTerm);
+            List<Stock> stockResults = reportingService.searchStock(searchTerm);
+
+            StringBuilder resultBuilder = new StringBuilder("Search Results:\n\nSales:\n");
+            for (Sale sale : salesResults) {
+                resultBuilder.append(String.format("Product ID: %s, Client ID: %s, Quantity: %d, Total Price: %.2f\n",
+                        sale.getProductId(), sale.getClientId(), sale.getQuantity(), sale.getTotalPrice()));
+            }
+
+            resultBuilder.append("\nStock:\n");
+            for (Stock stock : stockResults) {
+                resultBuilder.append(String.format("Product ID: %s, Product Name: %s, Quantity: %d\n",
+                        stock.getId(), stock.getProductName(), stock.getQuantity()));
+            }
+
+            JTextArea textArea = new JTextArea(resultBuilder.toString());
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(400, 300));
+            JOptionPane.showMessageDialog(this, scrollPane, "Search Results", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please enter a search term.");
+        }
     }
 
     private Date parseDate(String dateStr) {

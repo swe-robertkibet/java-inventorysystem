@@ -41,6 +41,15 @@ public class StockService {
         }
     }
 
+    public List<Stock> searchStock(String searchTerm) {
+        List<Stock> allStock = getAllStock();
+        return allStock.stream()
+                .filter(stock -> stock.getProductName().toLowerCase().contains(searchTerm.toLowerCase()) ||
+                        String.valueOf(stock.getQuantity()).contains(searchTerm) ||
+                        String.valueOf(stock.getPrice()).contains(searchTerm))
+                .toList();
+    }
+
     public List<Stock> getLowStockItems(int threshold) {
         return getAllStock().stream()
                 .filter(stock -> stock.getQuantity() < threshold)

@@ -33,11 +33,10 @@ public class SupplierService {
     }
 
     public List<Supplier> searchSuppliers(String searchTerm) {
-        // Implement search logic here
-        // This is a placeholder implementation
         List<Supplier> allSuppliers = getAllSuppliers();
         return allSuppliers.stream()
-                .filter(supplier -> supplier.getName().toLowerCase().contains(searchTerm.toLowerCase()) ||
+                .filter(supplier -> supplier.getId().contains(searchTerm) ||
+                        supplier.getName().toLowerCase().contains(searchTerm.toLowerCase()) ||
                         supplier.getContact().contains(searchTerm) ||
                         supplier.getAddress().toLowerCase().contains(searchTerm.toLowerCase()))
                 .toList();
